@@ -11,6 +11,16 @@ locals {
 }
 
 locals {
+  workspace_dns = {
+    dev = {
+      primary_domain = "weebaws.co.uk"
+      api_sub_domain = "api.weebaws.co.uk"
+      api_hosted_id = "Z48ZTUTNPL4MO"
+      }
+    }
+  }
+
+locals {
   workspace_network = {
     dev = {
       vpc_cidr = "192.168.0.0/16"
@@ -39,7 +49,7 @@ locals {
     dev = {
       fargate = {
         lisen_hello = {
-          port     = 5000
+          port     = 80
           protocol = "HTTP"
           type     = "forward"
         }

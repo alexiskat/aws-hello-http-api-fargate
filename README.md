@@ -20,6 +20,7 @@ A final deployment could look like the table below
 # PreRequisites 
  [aws-vault](https://github.com/99designs/aws-vault) must be installed on your local machine and a ```user``` must be configured for each environment you plan to deploy to ```dev|qa|prod```.
  [docker](https://docs.docker.com/get-docker/) must also be installed on the local machine
+ [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) must also be installed on the local machine
 # Run
 Amend the make file in all 4 modules and change the ```AWS_VAULT_PROFILE``` TODO: This needs to be a variabled passed in.
 In ```modules/shared-config``` amend the variable values to implement a setup tailor to your spec.

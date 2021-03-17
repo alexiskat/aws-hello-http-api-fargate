@@ -16,12 +16,3 @@ data "terraform_remote_state" "sec_state" {
     region = "eu-west-1"
   }
 }
-
-data "terraform_remote_state" "data_state" {
-  backend = "s3"
-  config = {
-    bucket = "weebaws-terraform-state"
-    key    = "env:/data-${module.config.entries.main.environment_name}/data-terraform.tfstate"
-    region = "eu-west-1"
-  }
-}

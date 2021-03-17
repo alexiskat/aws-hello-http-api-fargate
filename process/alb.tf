@@ -1,17 +1,23 @@
 
 resource "aws_alb" "fargate_alb" {
-  name = "${module.config.entries.tags.prefix}fargate-alb"
+  name     = "${module.config.entries.tags.prefix}fargate-private-alb"
+  internal = true
   subnets = [
-    data.terraform_remote_state.net_state.outputs.entries.subnet_id.public_sub_1a_id,
-    data.terraform_remote_state.net_state.outputs.entries.subnet_id.public_sub_1b_id
+    data.terraform_remote_state.net_state.outputs.entries.subnet_id.private_sub_1a_id,
+    data.terraform_remote_state.net_state.outputs.entries.subnet_id.private_sub_1b_id
   ]
   security_groups = [
     data.terraform_remote_state.sec_state.outputs.entries.sg_id.alb_fargate
   ]
+  access_logs {
+    bucket  = data.terraform_remote_state.data_state.outputs.entries.s3_id.log
+    prefix  = "fargate/alb"
+    enabled = true
+  }
   tags = merge(
     module.config.entries.tags.standard,
     {
-      "Name" = "${module.config.entries.tags.prefix}public-sub-1a"
+      "Name" = "${module.config.entries.tags.prefix}fargate-private-alb"
     },
   )
 }

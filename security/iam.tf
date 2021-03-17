@@ -115,9 +115,6 @@ resource "aws_iam_policy" "farage_container_base_policy" {
   })
 }
 
-
-
-
 # allow role to be assumed by ecs
 data "aws_iam_policy_document" "fargate_ecs_app_assume_role_policy" {
   statement {

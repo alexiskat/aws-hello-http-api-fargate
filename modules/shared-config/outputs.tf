@@ -1,5 +1,6 @@
 output "entries" {
   value = {
+
     main = {
       client_name              = local.client_name
       tf_module_name           = local.tf_module_name
@@ -24,6 +25,12 @@ output "entries" {
       private_sub_1b_zone_id = local.environment_private_sub_1b_zone_id
       alb_fargate_lis_hello  = local.environment_alb_fargate_lisener_hello
       alb_fargate_targ_hello = local.environment_alb_fargate_target_hello
+    }
+
+    dns = {
+      api_dns               = local.environment_api_dns
+      domain                = local.environment_primary_domain
+      main_public_hosted_id = local.environment_api_hosted_id
     }
 
     tags = {

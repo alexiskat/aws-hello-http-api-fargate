@@ -1,7 +1,7 @@
 
 MK_PATH           :=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 MK_PARENT         :=$(realpath $(MK_PATH)../)
-MODULE    		  := security
+MODULE            := data
 AWS_VAULT_PROFILE := weebaws
 
 define DOCKER_ENV_VARIABLES
@@ -22,24 +22,22 @@ init: check-var-env
 	$(DOCKER_ENV_VARIABLES) \
 	hashicorp/terraform:light init -backend=true -backend-config=environment/$(env)/backend.tfvars
 plan: check-var-env
-	#need to look into why creating IAM needs --no-session
-	# https://github.com/99designs/aws-vault/blob/master/USAGE.md#using---no-session
-	aws-vault exec $(AWS_VAULT_PROFILE) --no-session -- docker run -i -t \
+	aws-vault exec $(AWS_VAULT_PROFILE) $(AWS_VAULT_FLAG)-- docker run -i -t \
     $(DOCKER_ENV_VARIABLES) \
 	--entrypoint=/bin/sh \
 	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform plan -var-file environment/$(env)/terraform.tfvars'
 apply: check-var-env
-	aws-vault exec $(AWS_VAULT_PROFILE) --no-session -- docker run -i -t \
+	aws-vault exec $(AWS_VAULT_PROFILE) -- docker run -i -t \
 	$(DOCKER_ENV_VARIABLES) \
 	--entrypoint=/bin/sh \
 	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform apply -auto-approve -var-file environment/$(env)/terraform.tfvars'
 fmt: check-var-env
-	aws-vault exec $(AWS_VAULT_PROFILE) --no-session -- docker run -i -t \
+	aws-vault exec $(AWS_VAULT_PROFILE) -- docker run -i -t \
 	$(DOCKER_ENV_VARIABLES) \
 	hashicorp/terraform:light fmt --recursive
 destroy: check-var-env
-	aws-vault exec $(AWS_VAULT_PROFILE) --no-session -- docker run -i -t \
-    $(DOCKER_ENV_VARIABLES) \
+	aws-vault exec $(AWS_VAULT_PROFILE) -- docker run -i -t \
+	$(DOCKER_ENV_VARIABLES) \
 	--entrypoint=/bin/sh \
 	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform destroy -auto-approve -var-file environment/$(env)/terraform.tfvars'
 #

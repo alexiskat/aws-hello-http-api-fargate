@@ -21,5 +21,11 @@ output "entries" {
     iam_profile_name = {
       ec2_base = aws_iam_instance_profile.ec2_base_profile.name
     }
+    acm_cert_id = {
+      api = aws_acm_certificate.wild_card_cert.id
+    }
+    acm_cert_arn = {
+      api = aws_acm_certificate.wild_card_cert.arn
+    }
   }
 }

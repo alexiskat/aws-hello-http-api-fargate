@@ -16,7 +16,7 @@ def get_region():
     my_region = my_session.region_name
     return my_region
 
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 def index():
     return render_template('index.html')
 
@@ -32,4 +32,4 @@ def health_check():
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, port = 5000, host='0.0.0.0')

@@ -30,7 +30,7 @@ apply: check-var-env
 	aws-vault exec $(AWS_VAULT_PROFILE) -- docker run -i -t \
 	$(DOCKER_ENV_VARIABLES) \
 	--entrypoint=/bin/sh \
-	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform apply -var-file environment/$(env)/terraform.tfvars'
+	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform apply -auto-approve -var-file environment/$(env)/terraform.tfvars'
 fmt: check-var-env
 	aws-vault exec $(AWS_VAULT_PROFILE) -- docker run -i -t \
 	$(DOCKER_ENV_VARIABLES) \
@@ -39,7 +39,7 @@ destroy: check-var-env
 	aws-vault exec $(AWS_VAULT_PROFILE) -- docker run -i -t \
 	$(DOCKER_ENV_VARIABLES) \
 	--entrypoint=/bin/sh \
-	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform destroy -var-file environment/$(env)/terraform.tfvars'
+	hashicorp/terraform:light -c 'terraform workspace select $(MODULE)-$(env) && terraform destroy -auto-approve -var-file environment/$(env)/terraform.tfvars'
 #
 # workspace cmd's
 #

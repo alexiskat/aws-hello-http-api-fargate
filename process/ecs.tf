@@ -103,3 +103,21 @@ resource "aws_ecs_service" "fargate_ecs_service" {
   )
 }
 
+resource "aws_ssm_parameter" "foo" {
+  name        = "${module.config.entries.tags.prefix}fargate-deployment-details"
+  description = "Store the details od the ECS deployment"
+  type        = "String"
+  value       = <<EOF
+{
+"service_name": "${aws_ecs_service.fargate_ecs_service.name}",
+"repo_name": "${aws_ecr_repository.fargate_ecr_repo.name}",
+"cluster_name":"${aws_ecs_cluster.fargate_ecs_cluster.name}"
+}
+EOF
+  tags = merge(
+    module.config.entries.tags.standard,
+    {
+      "Name" = "${module.config.entries.tags.prefix}fargate-deployment-details"
+    },
+  )
+}
