@@ -67,3 +67,13 @@ locals {
     }
   }
 }
+
+locals {
+  workspace_ecr = {
+    dev = {
+      primary_domain = "weebaws.co.uk"
+      api_sub_domain = "api.weebaws.co.uk"
+      api_hosted_id = "Z48ZTUTNPL4MO"
+      }
+    }
+  }

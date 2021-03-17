@@ -9,13 +9,14 @@ set -e
 #AWS_REGION="$1"
 
 AWS_REGION=eu-west-1
-DOCKER_TAG=latest
+AWS_ENV=dev
+DOCKER_TAG=v1
+DOCKER_IMAGE=iw-ecs-quickstart
 PROJECT_CODE=xyz
-ENV=dev
 USER_ID=weebaws
 
 function get_parameter {
-    SSM_PARAM_NAME=${PROJECT_CODE}-${ENV}-fargate-deployment-details    
+    SSM_PARAM_NAME=${PROJECT_CODE}-${AWS_ENV}-fargate-deployment-details    
     aws-vault exec ${USER_ID} -- aws ssm get-parameters --with-decryption --names "${SSM_PARAM_NAME}"  --query 'Parameters[*].Value' --output text
 }
 
@@ -29,20 +30,13 @@ echo "ECR Cluster: $ECR_CLUSTER"
 echo "ECR Repo   : $ECR_REPO"
 
 ACCOUNT_ID=$(aws-vault exec ${USER_ID} -- aws sts get-caller-identity --query Account | tr -d '"')
-docker build -t iw-ecs-quickstart:${DOCKER_TAG} .
-docker tag $(docker images | grep ecs-quickstart | awk '{print $3}') ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}
+docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+echo "Build image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
+#docker tag $(docker images | grep ecs-quickstart | awk '{print $3}') ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}
+docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}
+docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${DOCKER_TAG}
+echo "Image tag: ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${DOCKER_TAG}"
 aws-vault exec ${USER_ID} -- aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+#aws-vault exec ${USER_ID} -- aws ecr list-images --region ${AWS_REGION} --repository-name ${ECR_REPO} --filter 'tagStatus=UNTAGGED' --query 'imageIds[*]' --output json
+docker push ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${DOCKER_TAG}
 docker push ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}
-# 
-# # This forces the ECS task to re-deploy the image in ECR with the newest version you've just pushed..
-# aws-vault exec ${USER_ID} -- aws --region $AWS_REGION ecs update-service \
-#                               --cluster $ECR_CLUSTER  \
-#                               --service $ECR_SERVICE \
-#                               --force-new-deployment
-
-
-#  NOTES:
- # aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 339638031741.dkr.ecr.eu-west-1.amazonaws.com
- # docker build -t xyz-dev-ecr-private .
- # docker tag xyz-dev-ecr-private:latest 339638031741.dkr.ecr.eu-west-1.amazonaws.com/xyz-dev-ecr-private:latest
- # docker push 339638031741.dkr.ecr.eu-west-1.amazonaws.com/xyz-dev-ecr-private:latest
