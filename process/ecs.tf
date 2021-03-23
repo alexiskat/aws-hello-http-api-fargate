@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "fargate_ecs_cluster_task_definition" {
 [
   {
     "name": "demo-container",
-    "image": "${aws_ecr_repository.fargate_ecr_repo.name}:${module.config.entries.ecs.task_hello_cont_demo_tag}",
+    "image": "${aws_ecr_repository.fargate_ecr_repo.repository_url}:${module.config.entries.ecs.task_hello_cont_demo_tag}",
     "memory": ${module.config.entries.ecs.task_hello_cont_demo_mem},
     "cpu": ${module.config.entries.ecs.task_hello_cont_demo_cpu},
     "essential": true,
