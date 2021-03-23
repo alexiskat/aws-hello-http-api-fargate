@@ -91,8 +91,8 @@ resource "aws_apigatewayv2_stage" "fargate_http_api_stage_v1" {
 }
 
 resource "aws_apigatewayv2_route" "fargate_http_api_proxy" {
-  api_id = aws_apigatewayv2_api.fargate_http_api.id
-  route_key          = "ANY /{proxy+}"
+  api_id    = aws_apigatewayv2_api.fargate_http_api.id
+  route_key = "ANY /{proxy+}"
   #route_key          = "$default"
   authorization_type = "NONE"
   target             = "integrations/${aws_apigatewayv2_integration.fargate_http_api_integration.id}"

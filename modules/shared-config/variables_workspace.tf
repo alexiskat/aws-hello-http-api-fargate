@@ -77,3 +77,24 @@ locals {
       }
     }
   }
+
+locals {
+  workspace_ecs = {
+    dev = {
+      hello_task = {
+        cpu = "512"
+        memory = "1024"
+        asg_max = 5
+        asg_min = 1
+        asg_mem = 80
+        asg_cpu = 60
+        demo_container = {
+          name = "demo"
+          tag = "latest"
+          memory = "512"
+          cpu = 256
+          }
+        }
+      }
+    }
+  }

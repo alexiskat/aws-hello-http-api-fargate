@@ -1,6 +1,8 @@
 # Introduction
 This repo can be used to deploy a  ```hello world ``` flask python app to AWS Fargate using terraform. Try to used best practise and an ever evolving template.
 
+```HTTP API``` -> ```VPC Link``` -> ```ALB``` -> ```Fargate```
+
 A final deployment could look like the table below
 | environment | TF Module | State file |
 | ------ | ------ | ------ |

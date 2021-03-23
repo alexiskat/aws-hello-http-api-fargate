@@ -37,5 +37,18 @@ output "entries" {
       prefix   = local.name_prefix
       standard = local.standard
     }
+
+    ecs = {
+      task_hello_cpu            = local.environment_task_hello_cpu 
+      task_hello_mem            = local.environment_task_hello_mem
+      task_hello_asg_max        = local.environment_task_hello_asg_max
+      task_hello_asg_min        = local.environment_task_hello_asg_min
+      task_hello_asg_mem        = local.environment_task_hello_asg_mem
+      task_hello_asg_cpu        = local.environment_task_hello_asg_cpu
+      task_hello_cont_demo_name = local.environment_task_hello_cont_demo_name 
+      task_hello_cont_demo_tag  = local.environment_task_hello_cont_demo_tag 
+      task_hello_cont_demo_mem  = local.environment_task_hello_cont_demo_mem 
+      task_hello_cont_demo_cpu  = local.environment_task_hello_cont_demo_cpu
+    }
   }
 }

@@ -1,7 +1,6 @@
 locals {
   environment_cidr = local.workspace_network[local.environment_name].vpc_cidr
 }
-
 locals {
   environment_public_sub_1a_cidr     = local.workspace_network[local.environment_name].public_sub_1a.cidr
   environment_public_sub_1a_zone_id  = local.workspace_network[local.environment_name].public_sub_1a.zone_id
